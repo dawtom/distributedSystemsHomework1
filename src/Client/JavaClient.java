@@ -44,7 +44,7 @@ public class JavaClient {
         while (scanner.hasNextLine()) {
             String message = scanner.nextLine();
             switch (message) {
-                case "UDP": {
+                case "U": {
                     InetAddress IPAddress = InetAddress.getByName("localhost");
                     datagramSocket.send(new DatagramPacket(car, car.length, IPAddress, MainApp.portNumber));
                     break;
