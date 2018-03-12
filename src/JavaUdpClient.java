@@ -12,6 +12,7 @@ public class JavaUdpClient {
 
         try {
             socket = new DatagramSocket();
+//            InetAddress address = InetAddress.getByName("192.168.0.10");
             InetAddress address = InetAddress.getByName("localhost");
             byte[] sendBuffer = "Ping Java Udp".getBytes();
             // nie mamy połączenia, więc za każdym razem musimy pisać gdzie wysyłamy

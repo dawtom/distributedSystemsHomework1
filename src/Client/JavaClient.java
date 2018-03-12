@@ -20,7 +20,8 @@ public class JavaClient {
 
         Socket socket = new Socket();
 
-        socket.connect(new InetSocketAddress("192.168.0.10", MainApp.portNumber));
+//        socket.connect(new InetSocketAddress("192.168.0.10", MainApp.portNumber));
+        socket.connect(new InetSocketAddress("localhost", MainApp.portNumber));
 
         DatagramSocket datagramSocket = new DatagramSocket(socket.getLocalPort());
 
@@ -40,13 +41,20 @@ public class JavaClient {
 
 
         new TcpClientInputHandler(socket.getInputStream()).start();
+        new MulticastClientInputHandler(name).start();
 
         while (scanner.hasNextLine()) {
             String message = scanner.nextLine();
             switch (message) {
                 case "U": {
+//                    InetAddress IPAddress = InetAddress.getByName("192.168.0.10");
                     InetAddress IPAddress = InetAddress.getByName("localhost");
                     datagramSocket.send(new DatagramPacket(car, car.length, IPAddress, MainApp.portNumber));
+                    break;
+                }
+                case "N": {
+                    InetAddress IPAddress = InetAddress.getByName("224.5.0.1");
+                    datagramSocket.send(new DatagramPacket(car, car.length, IPAddress, 15000));
                     break;
                 }
                 default:
@@ -57,54 +65,7 @@ public class JavaClient {
         }
 
         socket.close();
-        /*Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your name");
-        String name = scanner.nextLine();
 
-        System.out.println("JAVA TCP CLIENT");
-        String hostName = "localhost";
-        int portNumber = 12345;
-        Socket socket = null;
-
-
-
-        try {
-            // create socket
-//            socket = new Socket(hostName, portNumber);
-
-
-            DatagramSocket udpSocket = new DatagramSocket();
-//            new UdpClientInputHandler(udpSocket).start();
-
-            // in & out streams
-//            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
-            // send msg, read response
-
-//            out.println(name);
-//            out.flush();
-
-//            new TcpClientInputHandler(socket.getInputStream()).start();
-
-
-            while (true) {
-                String message = scanner.nextLine();
-//                out.println(message);
-                InetAddress address = InetAddress.getByName("localhost");
-                byte[] sendBuffer = message.getBytes();
-                DatagramPacket sendPacket = new DatagramPacket(message.getBytes(),message.getBytes().length, address, portNumber);
-                udpSocket.send(sendPacket);
-
-            }
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (socket != null){
-                socket.close();
-            }
-        }*/
     }
 
 }

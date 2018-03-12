@@ -21,21 +21,22 @@ public class JavaUdpServerStarter extends Thread {
 
                 // receive message
                 udpSocket.receive(udpPacket);
-                // create string based on buffer and split it into nick and message
+                // create string based on buffer and split it into name and message
                 String message = new String(buffer);
                 System.out.println("received: " + message);
 
                 String[] split = message.split(":", 2);
-                String nick = split[0];
+                String name = split[0];
 
                 // protecting the threads map
                 synchronized (MainApp.clientsThreadsMap) {
                     // for each client thread that is not me
-                    MainApp.clientsThreadsMap.entrySet().stream().filter(a -> !a.getKey().equals(nick))
+                    MainApp.clientsThreadsMap.entrySet().stream().filter(a -> !a.getKey().equals(name))
                             .forEach(a -> {
                                 try {
                                     // get port from client
                                     int port = a.getValue().getClientSocket().getPort();
+//                                    InetAddress IPAddress = InetAddress.getByName("192.168.0.10");
                                     InetAddress IPAddress = InetAddress.getByName("localhost");
                                     byte[] newBytes = (message).getBytes();
                                     // send message to client
